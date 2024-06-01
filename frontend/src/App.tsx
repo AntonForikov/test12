@@ -6,6 +6,8 @@ import Login from './containers/User/Login';
 import Container from '@mui/material/Container';
 import {useAppSelector} from './app/hooks';
 import {selectUser} from './store/user/userSlice';
+import ProtectedRoute from './components/ProtectedRoute/ProtectedRoute';
+import AddImage from './containers/AddImage/AddImage';
 
 function App() {
   const user = useAppSelector(selectUser);
@@ -18,17 +20,11 @@ function App() {
         <Container maxWidth="xl">
           <Routes>
             <Route path="/" element={<Home/>}/>
-            {/*<Route path="/:id" element={*/}
-            {/*  <ProtectedRoute isAllowed={Boolean(user)}>*/}
-            {/*    <Cocktail/>*/}
-            {/*  </ProtectedRoute>*/}
-            {/*}/>*/}
-
-            {/*<Route path="/newImage" element={*/}
-            {/*  <ProtectedRoute isAllowed={Boolean(user)}>*/}
-            {/*    <AddCocktail/>*/}
-            {/*  </ProtectedRoute>*/}
-            {/*}/>*/}
+            <Route path="/newImage" element={
+              <ProtectedRoute isAllowed={Boolean(user)}>
+                <AddImage/>
+              </ProtectedRoute>
+            }/>
             <Route path="/userImages/:id" element={<Home userImages/>}/>
             <Route path="/register" element={<Register/>}/>
             <Route path="/login" element={<Login/>}/>

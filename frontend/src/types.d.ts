@@ -8,6 +8,11 @@ export interface ImageFromDb {
   image: string;
 }
 
+export interface ImageMutation {
+  title: string,
+  image: File | null
+}
+
 export interface UserFromDb {
   _id: string;
   email: string;

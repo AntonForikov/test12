@@ -39,11 +39,11 @@ imageRouter.get('/', async (req: Auth, res, next) => {
 
   try {
     if (typeof user === 'string') {
-      const userImages = await Images.find({user});
+      const userImages = await Images.find({user}).populate('user', 'displayName');
       return res.send(userImages);
     }
 
-    const allImages = await Images.find().populate('user', '_id displayName');
+    const allImages = await Images.find().populate('user', 'displayName');
     return res.send(allImages);
   } catch (e) {
     next(e);

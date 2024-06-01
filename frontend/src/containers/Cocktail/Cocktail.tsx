@@ -1,8 +1,8 @@
 import {useParams} from 'react-router-dom';
 import {useEffect} from 'react';
 import {useAppDispatch, useAppSelector} from '../../app/hooks';
-import {selectCocktail} from '../../store/album/cocktailSlice';
-import {getCocktailById, gradeCocktail} from '../../store/album/cocktailThunk';
+import {selectCocktail} from '../../store/image/imageSlice';
+import {getCocktailById, gradeCocktail} from '../../store/image/imageThunk';
 import Grid from '@mui/material/Grid';
 import no_image_available from '../../../assets/no_image_available.png';
 import {apiUrl} from '../../constants';

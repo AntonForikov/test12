@@ -1,26 +1,22 @@
 import {
-  Card,
+  Card, CardContent,
   CardMedia,
   Grid,
-  styled, Typography,
+  styled, Typography
 } from '@mui/material';
-import UnpublishedIcon from '@mui/icons-material/Unpublished';
-import VisibilityIcon from '@mui/icons-material/Visibility';
-import no_image_available from '../../../assets/no_image_available.png';
 import React from 'react';
 import {apiUrl} from '../../constants';
 import {useAppDispatch, useAppSelector} from '../../app/hooks';
 import {selectUser} from '../../store/user/userSlice';
-import Button from '@mui/material/Button';
-import {deleteCocktail, getCocktails, publishCocktail} from '../../store/album/cocktailThunk';
-import Box from '@mui/material/Box';
 import {useNavigate} from 'react-router-dom';
+import Box from '@mui/material/Box';
+import Button from '@mui/material/Button';
 
 interface Props {
-  id: string,
-  name: string,
-  image: string | null| undefined,
-  isPublished: boolean
+  imageUserId: string,
+  title: string,
+  image: string,
+  displayName: string
 }
 
 const ImageCardMedia = styled(CardMedia)({
@@ -29,64 +25,74 @@ const ImageCardMedia = styled(CardMedia)({
 });
 
 const CardItem: React.FC<Props> = ({
-  id,
-  name,
+  imageUserId,
+  title,
   image,
-  isPublished,
+  displayName
 }) => {
-  const user = useAppSelector(selectUser);
-  const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  let cardImage = no_image_available;
+  const [open, setOpen] = React.useState(false);
 
-  if (image) cardImage = `${apiUrl}/${image}`;
-  const onCardClick = () => {
-    navigate(`/${id}`);
-  };
+  const cardImage = `${apiUrl}/${image}`;
 
-  const onPublish = async (e: React.MouseEvent) => {
-    e.stopPropagation();
-    await dispatch(publishCocktail(id));
-    dispatch(getCocktails());
-  };
+  // if (image) cardImage = `${apiUrl}/${image}`;
+  // const onCardClick = () => {
+  //   navigate(`/userImages/${id}`);
+  // };
 
-  const onDelete = async (e: React.MouseEvent) => {
-    e.stopPropagation();
-    const confirmation = confirm('Are you sure?');
-    if (confirmation) {
-      await dispatch(deleteCocktail(id));
-      dispatch(getCocktails());
-    }
-  };
+  // const onDelete = async (e: React.MouseEvent) => {
+  //   e.stopPropagation();
+  //   const confirmation = confirm('Are you sure?');
+  //   if (confirmation) {
+  //     await dispatch(deleteCocktail(id));
+  //     dispatch(getImages());
+  //   }
+  // };
+  // const showFillScreenModal = () => {
+  //   return <ImageModal show={true}/>;
+  // };
 
   return (
-    <Grid item xs md={3} lg={3} sx={{cursor: 'pointer'}} onClick={onCardClick}>
-      <Card>
-        <Grid container justifyContent='space-between' alignItems='center' p={1}>
-          <Typography variant='h6'>{name}</Typography>
-          {!isPublished && user?.role === 'admin' &&
-            <Box display='flex'>
-              <><Typography color="red" marginRight={1}>Unpublished</Typography><UnpublishedIcon color="error"/></>
-            </Box>
-          }
-          {!isPublished && user?.role === 'user' &&
-            <Box display='flex'>
-              <><Typography color="warning.main" marginRight={1}>On review</Typography><VisibilityIcon color="warning"/></>
-            </Box>
-          }
-        </Grid>
-        <ImageCardMedia image={cardImage} title={name}/>
-        <Grid container justifyContent="space-around">
-          {
-            user?.role === 'admin' &&
-            <>
-              <Button color="error" onClick={onDelete}>Delete</Button>
-              {!isPublished && <Button color="success" onClick={onPublish}>Publish</Button>}
-            </>
-          }
-        </Grid>
-      </Card>
-    </Grid>
+    <>
+      <Grid item xs md={3} lg={3}>
+        <Card>
+          <ImageCardMedia image={cardImage} title={title} onClick={() => setOpen(true)} sx={{cursor: 'pointer'}}/>
+          <CardContent>
+            <Typography
+              variant="h6"
+              sx={{cursor: 'pointer'}}
+            >
+              {title}
+            </Typography>
+            <Typography
+              variant="h6"
+              sx={{cursor: 'pointer'}}
+              onClick={() => navigate(`/userImages/${imageUserId}`)}
+            >
+              By {displayName}
+            </Typography>
+          </CardContent>
+        </Card>
+      </Grid>
+
+
+      {open &&
+        <Box
+          position="absolute"
+          width="100%"
+          height="100vh"
+          sx={{top: 5, cursor: 'pointer'}}
+          display='flex'
+          justifyContent='center'
+          alignItems='center'
+          flexDirection='column'
+          onClick={() => setOpen(false)}
+        >
+          <img src={cardImage} alt={title} width='96%' style={{borderRadius: 10}}/>
+          <Button>Close</Button>
+        </Box>
+      }
+    </>
   );
 };
 

@@ -2,10 +2,11 @@ import {Grid, IconButton, Menu, MenuItem, Typography} from '@mui/material';
 import {UserFromDb} from '../../types';
 import React, {useState} from 'react';
 import {Link, useNavigate} from 'react-router-dom';
-import {useAppDispatch} from '../../app/hooks';
+import {useAppDispatch, useAppSelector} from '../../app/hooks';
 import {logout} from '../../store/user/userThunk';
 import {AccountCircle} from '@mui/icons-material';
 import Avatar from '@mui/material/Avatar';
+import {selectUser} from '../../store/user/userSlice';
 
 interface Props {
   user: UserFromDb
@@ -58,7 +59,7 @@ const UserMenu: React.FC<Props> = ({user}) => {
         onClose={handleClose}
       >
         <MenuItem component={Link} to='/newImage' onClick={handleClose}>Add Image</MenuItem>
-        <MenuItem component={Link} to='/myImages' onClick={handleClose}>My Images</MenuItem>
+        <MenuItem component={Link} to={`/userImages/${user?._id}`} onClick={handleClose}>My Images</MenuItem>
         <MenuItem onClick={logoutUser}>Log Out</MenuItem>
       </Menu>
     </>

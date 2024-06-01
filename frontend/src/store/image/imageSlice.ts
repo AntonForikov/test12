@@ -1,7 +1,7 @@
 import {ImageFromDb} from '../../types';
 import {createSlice} from '@reduxjs/toolkit';
 import {RootState} from '../../app/store';
-import {getImages} from './imageThunk';
+import {getImages, getUserImages} from './imageThunk';
 
 interface ImageState {
   imageList: ImageFromDb[];
@@ -26,14 +26,14 @@ const imageSlice = createSlice({
     }).addCase(getImages.rejected, (state) => {
       state.imageLoading = false;
     });
-    // builder.addCase(getUserCocktails.pending, (state) => {
-    //   state.cocktailLoading = true;
-    // }).addCase(getUserCocktails.fulfilled, (state, {payload: cocktails}) => {
-    //   state.cocktailLoading = false;
-    //   if (cocktails) state.cocktailList = cocktails;
-    // }).addCase(getUserCocktails.rejected, (state) => {
-    //   state.cocktailLoading = false;
-    // });
+    builder.addCase(getUserImages.pending, (state) => {
+      state.imageLoading = true;
+    }).addCase(getUserImages.fulfilled, (state, {payload: images}) => {
+      state.imageLoading = false;
+      if (images) state.imageList = images;
+    }).addCase(getUserImages.rejected, (state) => {
+      state.imageLoading = false;
+    });
     // builder.addCase(getCocktailById.pending, (state) => {
     //   state.cocktailLoading = true;
     // }).addCase(getCocktailById.fulfilled, (state, {payload: cocktail}) => {

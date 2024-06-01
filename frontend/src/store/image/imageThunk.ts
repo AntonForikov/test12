@@ -31,17 +31,17 @@ export const getImages = createAsyncThunk(
   }
 );
 
-// export const getUserCocktails = createAsyncThunk(
-//   'getUserCocktails/get',
-//   async (id: string) => {
-//     try {
-//       const {data} = await axiosApi.get<ImageFromDb[]>(`/cocktails?user=${id}`);
-//       return data;
-//     } catch (e) {
-//       return [];
-//     }
-//   }
-// );
+export const getUserImages = createAsyncThunk(
+  'getUserImages/get',
+  async (id: string) => {
+    try {
+      const {data} = await axiosApi.get<ImageFromDb[]>(`/images?user=${id}`);
+      return data;
+    } catch (e) {
+      return [];
+    }
+  }
+);
 //
 // export const getCocktailById = createAsyncThunk(
 //   'getCocktailById/get',

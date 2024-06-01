@@ -1,18 +1,14 @@
 import {Model} from 'mongoose';
 import {ObjectId} from 'mongodb';
 
-export interface CocktailFromDB {
+export interface ImageFromDB {
   _id: ObjectId;
   user: ObjectId;
-  name: string;
-  receipt: string;
-  image?: string | null;
-  isPublished: boolean;
-  ingredients: [{title: string, quantity: string}];
-  grades: [{user: ObjectId, grade: string}]
+  title: string;
+  image: string;
 }
 
-export type CocktailWithoutId = Omit<CocktailFromDB, '_id'>;
+export type ImageWithoutId = Omit<ImageFromDB, '_id'>;
 
 export interface UserFields {
   email: string;

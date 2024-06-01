@@ -34,14 +34,6 @@ const imageSlice = createSlice({
     }).addCase(getUserImages.rejected, (state) => {
       state.imageLoading = false;
     });
-    // builder.addCase(getCocktailById.pending, (state) => {
-    //   state.cocktailLoading = true;
-    // }).addCase(getCocktailById.fulfilled, (state, {payload: cocktail}) => {
-    //   state.cocktailLoading = false;
-    //   if (cocktail) state.cocktail = cocktail;
-    // }).addCase(getCocktailById.rejected, (state) => {
-    //   state.cocktailLoading = false;
-    // });
   }
 });
 

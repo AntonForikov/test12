@@ -73,7 +73,9 @@ const CardItem: React.FC<Props> = ({
               </Typography>
             }
             {user?.role === 'admin' &&
-              <Button color='error' onClick={onDelete}>Delete</Button>
+              <Grid container justifyContent='flex-end'>
+                <Button color='error' onClick={onDelete}>Delete</Button>
+              </Grid>
             }
           </CardContent>
         </Card>

@@ -28,7 +28,7 @@ const UserMenu: React.FC<Props> = ({user}) => {
     const confirmation = confirm('Are you sure?');
     if (confirmation) {
       await dispatch(logout());
-      navigate('/login');
+      navigate('/');
     } else {
       handleClose();
     }

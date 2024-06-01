@@ -64,11 +64,11 @@ const AddAlbum = () => {
     try {
       setDisabler(true);
       await dispatch(addImage(image));
-      setDisabler(false);
       navigate('/');
     } catch (e) {
       console.error(e);
     } finally {
+      setDisabler(false);
       resetFileInput();
       setImage(initial);
       setFileName('');

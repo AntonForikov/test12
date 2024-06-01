@@ -35,7 +35,7 @@ const Home: React.FC<Props> = ({userImages = false}) => {
             variant="h4">{imageList[0].user.displayName}'s Gallery</Typography></Grid>
         }
         {loading
-          ? <CircularProgress/>
+          ? <CircularProgress sx={{mt: 2}}/>
           : !loading && imageList.length < 1
             ? <Alert severity="warning" sx={{marginTop: 2}}>There is no images in database</Alert>
             : imageList.map((image) => {

@@ -13,7 +13,7 @@ const UserSchema = new Schema<UserFields, UserModel, UserMethods>({
       validator: async function (this: HydratedDocument<UserFields> ,email: string): Promise<boolean> {
         if (!this.isModified('email')) return true;
 
-        const user: HydratedDocument<UserFields> | null = await User.findOne({email});
+        const user: HydratedDocument<UserFields> | null = await Users.findOne({email});
         return !Boolean(user);
       },
       message: 'This user already exist'
@@ -63,6 +63,6 @@ UserSchema.set('toJSON', {
   }
 })
 
-const User = model<UserFields, UserModel>('User', UserSchema);
+const Users = model<UserFields, UserModel>('Users', UserSchema);
 
-export default User;
+export default Users;

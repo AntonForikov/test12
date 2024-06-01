@@ -1,7 +1,7 @@
 import express from 'express';
 import mongoose from 'mongoose';
 import config from './config';
-import cocktailRouter from './routes/cocktail';
+import imageRouter from './routes/image';
 import userRouter from './routes/user';
 import cors from 'cors';
 
@@ -11,7 +11,7 @@ const port = 8000;
 app.use(express.json());
 app.use(cors({origin: ['http://localhost:5173']}));
 app.use(express.static('public'));
-app.use('/cocktails', cocktailRouter);
+app.use('/images', imageRouter);
 app.use('/users', userRouter);
 
 const run = async () => {

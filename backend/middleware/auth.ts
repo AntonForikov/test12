@@ -1,7 +1,7 @@
 import {NextFunction, Request, Response} from 'express';
 import {HydratedDocument} from 'mongoose';
 import {UserFromDb} from '../types';
-import User from '../models/User';
+import Users from '../models/Users';
 
 export interface Auth extends Request{
   user?: HydratedDocument<UserFromDb>
@@ -13,7 +13,7 @@ const auth =  async (req: Auth, res: Response, next: NextFunction) => {
   if (!tokenData) return res.status(401).send({error: 'No token provided'});
 
   const [_, token] = tokenData.split(' ');
-  const user = await User.findOne({token});
+  const user = await Users.findOne({token});
 
   if (!user) return res.status(403).send({error: 'Wrong token'});
 

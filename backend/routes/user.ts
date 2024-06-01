@@ -1,5 +1,5 @@
 import express from 'express';
-import User from '../models/User';
+import Users from '../models/Users';
 import mongoose, {mongo} from 'mongoose';
 import {OAuth2Client} from 'google-auth-library';
 import config from '../config';
@@ -10,7 +10,7 @@ const client = new OAuth2Client(config.google.clientId);
 
 userRouter.post('/', imagesUpload.single('image'), async (req, res, next) => {
   try {
-    const user = new User({
+    const user = new Users({
       email: req.body.email,
       password: req.body.password,
       displayName: req.body.displayName,
@@ -31,7 +31,7 @@ userRouter.post('/', imagesUpload.single('image'), async (req, res, next) => {
 
 userRouter.post('/sessions', async (req, res, next) => {
   try {
-    const user = await User.findOne({email: req.body.email});
+    const user = await Users.findOne({email: req.body.email});
 
     if (!user) return res.status(404).send({error: "Email and password doesn't match."});
 
@@ -64,10 +64,10 @@ userRouter.post('/google', async (req, res, next) => {
 
     if (!email) return res.status(400).send({error: 'Email is required.'});
 
-    let user = await User.findOne({googleID: id});
+    let user = await Users.findOne({googleID: id});
 
     if (!user) {
-      user = new User ({
+      user = new Users ({
         email,
         password: crypto.randomUUID(),
         googleID: id,
@@ -94,7 +94,7 @@ userRouter.delete('/sessions', async (req, res, next) => {
     if (!tokenData) return res.status(401).send({error: 'No token provided'});
 
     const [_, token] = tokenData.split(' ');
-    const user = await User.findOne({token});
+    const user = await Users.findOne({token});
 
     if (!user) return res.send(successMessage);
 

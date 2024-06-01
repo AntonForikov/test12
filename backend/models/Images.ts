@@ -4,7 +4,7 @@ import Users from './Users';
 const ImageSchema = new Schema({
   user: {
     type: Schema.Types.ObjectId,
-    ref: 'user',
+    ref: 'Users',
     required: true,
     validate: {
       validator: async (id: Types.ObjectId) => Users.findById(id),
@@ -15,7 +15,10 @@ const ImageSchema = new Schema({
     type: String,
     required: true
   },
-  image: String || null,
+  image: {
+    type: String,
+    required: true
+  },
 
 }, {versionKey: false});
 

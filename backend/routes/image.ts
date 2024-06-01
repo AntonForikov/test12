@@ -12,15 +12,15 @@ imageRouter.post('/', auth, imagesUpload.single('image'), async (req: Auth, res,
   try {
     const {title} = req.body;
 
-    if (title === '' || title[0] === ' ') {
-      return res.status(400).send({error: 'Title is required for image creation and can not begin from whitespace.'});
+    if (title[0] === ' ') {
+      if (req.file?.filename) deleteImage(req.file?.filename);
+      return res.status(400).send({error: 'Title can not begin from whitespace.'});
     }
-    if (!req.file) return res.status(400).send({error: 'Image is required.'});
 
     const imageData = {
       user: req.user?._id,
       title,
-      image: req.file.filename
+      image: req.file ? req.file.filename : null
     };
 
     const image = new Images(imageData);
@@ -43,20 +43,9 @@ imageRouter.get('/', async (req: Auth, res, next) => {
       return res.send(userImages);
     }
 
-    const allImages = await Images.find().populate('user');
+    const allImages = await Images.find().populate('user', '_id displayName');
     return res.send(allImages);
   } catch (e) {
-    next(e);
-  }
-});
-
-imageRouter.get('/:_id', auth, async (req: Auth, res, next) => {
-  try {
-    const {_id} = req.params;
-    const targetCocktail = await Images.findById({_id});
-    return res.send(targetCocktail);
-  } catch (e) {
-    if (e instanceof mongoose.Error.CastError) return res.status(404).send({error: 'No such album'});
     next(e);
   }
 });
@@ -68,15 +57,16 @@ imageRouter.delete('/:id', auth, permit(['admin']), async (req: Auth, res, next)
     try {
       _id = new ObjectId(id);
     } catch {
-      return res.status(404).send({error: 'Images id is not an ObjectId.'});
+      return res.status(404).send({error: 'Image id is not an ObjectId.'});
     }
 
-    const targetCocktail = await Images.findById(_id);
-    if (!targetCocktail) return res.status(400).send({error: 'There is no cocktail to delete'});
+    const targetImage = await Images.findById(_id);
+    if (!targetImage) return res.status(400).send({error: 'There is no image to delete'});
 
     await Images.deleteOne(_id);
+    deleteImage(targetImage.image);
 
-    return res.send({success: 'Images has been deleted.'});
+    return res.send({success: 'Image has been deleted.'});
   } catch (e) {
     next(e);
   }

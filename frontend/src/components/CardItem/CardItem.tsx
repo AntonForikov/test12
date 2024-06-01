@@ -11,7 +11,7 @@ import {selectUser} from '../../store/user/userSlice';
 import {useNavigate} from 'react-router-dom';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
-import {deleteImage} from '../../store/image/imageThunk';
+import {deleteImage, getImages} from '../../store/image/imageThunk';
 
 interface Props {
   imageId: string,
@@ -47,6 +47,7 @@ const CardItem: React.FC<Props> = ({
     const confirmation = confirm('Are you sure?');
     if (confirmation) {
       await dispatch(deleteImage(imageId));
+      await dispatch(getImages());
       navigate('/');
     }
   };

@@ -2,11 +2,10 @@ import {Grid, IconButton, Menu, MenuItem, Typography} from '@mui/material';
 import {UserFromDb} from '../../types';
 import React, {useState} from 'react';
 import {Link, useNavigate} from 'react-router-dom';
-import {useAppDispatch, useAppSelector} from '../../app/hooks';
+import {useAppDispatch} from '../../app/hooks';
 import {logout} from '../../store/user/userThunk';
 import {AccountCircle} from '@mui/icons-material';
 import Avatar from '@mui/material/Avatar';
-import {selectUser} from '../../store/user/userSlice';
 
 interface Props {
   user: UserFromDb

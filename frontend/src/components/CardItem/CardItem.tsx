@@ -11,8 +11,10 @@ import {selectUser} from '../../store/user/userSlice';
 import {useNavigate} from 'react-router-dom';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
+import {deleteImage} from '../../store/image/imageThunk';
 
 interface Props {
+  imageId: string,
   imageUserId: string,
   title: string,
   image: string,
@@ -25,32 +27,27 @@ const ImageCardMedia = styled(CardMedia)({
 });
 
 const CardItem: React.FC<Props> = ({
+  imageId,
   imageUserId,
   title,
   image,
   displayName
 }) => {
   const navigate = useNavigate();
+  const user = useAppSelector(selectUser);
+  const dispatch = useAppDispatch();
   const [open, setOpen] = React.useState(false);
 
   const cardImage = `${apiUrl}/${image}`;
 
-  // if (image) cardImage = `${apiUrl}/${image}`;
-  // const onCardClick = () => {
-  //   navigate(`/userImages/${id}`);
-  // };
-
-  // const onDelete = async (e: React.MouseEvent) => {
-  //   e.stopPropagation();
-  //   const confirmation = confirm('Are you sure?');
-  //   if (confirmation) {
-  //     await dispatch(deleteCocktail(id));
-  //     dispatch(getImages());
-  //   }
-  // };
-  // const showFillScreenModal = () => {
-  //   return <ImageModal show={true}/>;
-  // };
+  const onDelete = async (e: React.MouseEvent) => {
+    e.stopPropagation();
+    const confirmation = confirm('Are you sure?');
+    if (confirmation) {
+      await dispatch(deleteImage(imageId));
+      navigate('/');
+    }
+  };
 
   return (
     <>
@@ -71,6 +68,9 @@ const CardItem: React.FC<Props> = ({
             >
               By {displayName}
             </Typography>
+            {user?.role === 'admin' &&
+              <Button color='error' onClick={onDelete}>Delete</Button>
+            }
           </CardContent>
         </Card>
       </Grid>

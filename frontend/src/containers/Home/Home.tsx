@@ -41,6 +41,7 @@ const Home: React.FC<Props> = ({userImages = false}) => {
             : imageList.map((image) => {
               return (<CardItem
                   key={image._id}
+                  imageId={image._id}
                   imageUserId={image.user._id}
                   title={image.title}
                   image={image.image}

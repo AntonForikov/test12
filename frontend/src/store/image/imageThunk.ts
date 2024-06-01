@@ -69,9 +69,9 @@ export const getUserImages = createAsyncThunk(
 //   }
 // );
 //
-// export const deleteCocktail = createAsyncThunk(
-//   'deleteCocktail/delete',
-//   async (id: string) => {
-//     await axiosApi.delete(`/cocktails/${id}`);
-//   }
-// );
+export const deleteImage = createAsyncThunk(
+  'deleteImage/delete',
+  async (id: string) => {
+    await axiosApi.delete(`/images/${id}`);
+  }
+);

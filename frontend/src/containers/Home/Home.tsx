@@ -2,30 +2,31 @@ import {Alert, CircularProgress, Grid, Typography} from '@mui/material';
 import {useAppDispatch, useAppSelector} from '../../app/hooks';
 import React, {useCallback, useEffect} from 'react';
 import CardItem from '../../components/CardItem/CardItem';
-import {selectCocktailList, selectCocktailLoading} from '../../store/album/cocktailSlice';
-import {getCocktails, getUserCocktails} from '../../store/album/cocktailThunk';
+import {selectImageList, selectImageLoading} from '../../store/image/imageSlice';
+import {getImages} from '../../store/image/imageThunk';
 import {selectUser} from '../../store/user/userSlice';
 
 interface Props{
-  userCocktails?: boolean
+  userImages?: boolean
 }
-const Home: React.FC<Props> = ({userCocktails= false}) => {
-  const cocktailList = useAppSelector(selectCocktailList);
-  const loading = useAppSelector(selectCocktailLoading);
+const Home: React.FC<Props> = ({userImages = false}) => {
+  const imageList = useAppSelector(selectImageList);
+  const loading = useAppSelector(selectImageLoading);
   const user = useAppSelector(selectUser);
   const dispatch = useAppDispatch();
 
-  const getCocktailsInfo = useCallback(async () => {
-    dispatch(getCocktails());
-  }, [dispatch]);
+  // const getCocktailsInfo = useCallback(async () => {
+  //   dispatch(getCocktails());
+  // }, [dispatch]);
 
   useEffect(() => {
-    if (userCocktails && user) {
-      dispatch(getUserCocktails(user?._id));
-    } else {
-      void getCocktailsInfo();
-    }
-  }, [dispatch, userCocktails, user, getCocktailsInfo]);
+    dispatch(getImages());
+    // if (userImages && user) {
+    //   dispatch(getUserCocktails(user?._id));
+    // } else {
+    //   void getCocktailsInfo();
+    // }
+  }, [dispatch]);
 
   return (
     <>
@@ -33,15 +34,14 @@ const Home: React.FC<Props> = ({userCocktails= false}) => {
         <Grid container justifyContent="center"  marginTop={3}><Typography variant="h4">Cocktails</Typography></Grid>
         {loading
           ? <CircularProgress/>
-          : !loading && cocktailList.length < 1
+          : !loading && imageList.length < 1
             ? <Alert severity="warning">There is no cocktails in database</Alert>
-            : cocktailList.map((cocktail) => {
+            : imageList.map((image) => {
               return (<CardItem
-                  key={cocktail._id}
-                  id={cocktail._id}
-                  name={cocktail.name}
-                  image={cocktail.image}
-                  isPublished={cocktail.isPublished}
+                  key={image._id}
+                  id={image._id}
+                  title={image.title}
+                  image={image.image}
                 />
               );
             })

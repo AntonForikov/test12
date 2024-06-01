@@ -1,18 +1,18 @@
 import {combineReducers, configureStore} from '@reduxjs/toolkit';
-import {cocktailReducer} from '../store/album/cocktailSlice';
+import {imageReducer} from '../store/image/imageSlice';
 import {userReducer} from '../store/user/userSlice';
 import storage from 'redux-persist/lib/storage';
 import {persistReducer, FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER, persistStore} from 'redux-persist';
 
 
 const userPersistConfig = {
-  key: 'cocktails:users',
+  key: 'gallery:users',
   storage,
   whitelist: ['user']
 };
 
 const rootReducer = combineReducers({
-  cocktails: cocktailReducer,
+  images: imageReducer,
   users: persistReducer(userPersistConfig, userReducer)
 });
 

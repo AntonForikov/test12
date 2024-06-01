@@ -10,20 +10,23 @@ const imageRouter = express.Router();
 
 imageRouter.post('/', auth, imagesUpload.single('image'), async (req: Auth, res, next) => {
   try {
-    const {name, receipt, ingredients} = req.body;
+    const {title} = req.body;
 
-    const cocktailData = {
+    if (title === '' || title[0] === ' ') {
+      return res.status(400).send({error: 'Title is required for image creation and can not begin from whitespace.'});
+    }
+    if (!req.file) return res.status(400).send({error: 'Image is required.'});
+
+    const imageData = {
       user: req.user?._id,
-      name: name,
-      receipt: receipt,
-      image: req.file ? req.file.filename : null,
-      ingredients: JSON.parse(ingredients)
+      title,
+      image: req.file.filename
     };
 
-    const cocktail = new Images(cocktailData);
-    await cocktail.save();
+    const image = new Images(imageData);
+    await image.save();
 
-    return res.send(cocktail);
+    return res.send(image);
   } catch (e) {
     if (req.file?.filename) deleteImage(req.file?.filename);
     if (e instanceof mongoose.Error.ValidationError) return res.status(422).send(e);
@@ -31,22 +34,17 @@ imageRouter.post('/', auth, imagesUpload.single('image'), async (req: Auth, res,
   }
 });
 
-imageRouter.get('/', auth, async (req: Auth, res, next) => {
+imageRouter.get('/', async (req: Auth, res, next) => {
   const {user} = req.query;
 
   try {
-    if (req.user?.role === 'admin' && !user) {
-      const allAlbums = await Images.find();
-      return res.send(allAlbums);
-    }
-
     if (typeof user === 'string') {
-      const userCocktails = await Images.find({user});
-      return res.send(userCocktails)
+      const userImages = await Images.find({user});
+      return res.send(userImages);
     }
 
-    const publishedAlbums = await Images.find({isPublished: true});
-    return res.send(publishedAlbums);
+    const allImages = await Images.find().populate('user');
+    return res.send(allImages);
   } catch (e) {
     next(e);
   }

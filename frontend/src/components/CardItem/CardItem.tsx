@@ -19,6 +19,7 @@ interface Props {
   title: string,
   image: string,
   displayName: string
+  userCard?: boolean
 }
 
 const ImageCardMedia = styled(CardMedia)({
@@ -31,7 +32,8 @@ const CardItem: React.FC<Props> = ({
   imageUserId,
   title,
   image,
-  displayName
+  displayName,
+  userCard=false
 }) => {
   const navigate = useNavigate();
   const user = useAppSelector(selectUser);
@@ -57,17 +59,19 @@ const CardItem: React.FC<Props> = ({
           <CardContent>
             <Typography
               variant="h6"
-              sx={{cursor: 'pointer'}}
             >
               {title}
             </Typography>
-            <Typography
-              variant="h6"
-              sx={{cursor: 'pointer'}}
-              onClick={() => navigate(`/userImages/${imageUserId}`)}
-            >
-              By {displayName}
-            </Typography>
+            {!userCard &&
+              <Typography
+                variant="h6"
+                sx={{cursor: 'pointer'}}
+                onClick={() => navigate(`/userImages/${imageUserId}`)}
+                color='primary'
+              >
+                By {displayName}
+              </Typography>
+            }
             {user?.role === 'admin' &&
               <Button color='error' onClick={onDelete}>Delete</Button>
             }

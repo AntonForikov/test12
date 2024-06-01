@@ -30,24 +30,37 @@ const Home: React.FC<Props> = ({userImages = false}) => {
         {!userImages &&
           <Grid container justifyContent="center" marginTop={3}><Typography variant="h4">Gallery</Typography></Grid>
         }
-        {userImages && imageList.length > 0 &&
+        {userImages && imageList.length > 0 && !loading &&
           <Grid container justifyContent="center" marginTop={3}><Typography
-            variant="h4">Gallery {imageList[0].user.displayName}</Typography></Grid>
+            variant="h4">{imageList[0].user.displayName}'s Gallery</Typography></Grid>
         }
         {loading
           ? <CircularProgress/>
           : !loading && imageList.length < 1
             ? <Alert severity="warning" sx={{marginTop: 2}}>There is no images in database</Alert>
             : imageList.map((image) => {
-              return (<CardItem
-                  key={image._id}
-                  imageId={image._id}
-                  imageUserId={image.user._id}
-                  title={image.title}
-                  image={image.image}
-                  displayName={image.user.displayName}
-                />
-              );
+              if (!userImages) {
+                return (<CardItem
+                    key={image._id}
+                    imageId={image._id}
+                    imageUserId={image.user._id}
+                    title={image.title}
+                    image={image.image}
+                    displayName={image.user.displayName}
+                  />
+                );
+              } else {
+                return (<CardItem
+                    key={image._id}
+                    imageId={image._id}
+                    imageUserId={image.user._id}
+                    title={image.title}
+                    image={image.image}
+                    displayName={image.user.displayName}
+                    userCard
+                  />
+                );
+              }
             })
         }
       </Grid>
